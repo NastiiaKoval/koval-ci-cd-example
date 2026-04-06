@@ -1,4 +1,4 @@
-# lab5_bundle
+# lab7_bundle_ci/cd
 
 This project implements a complete Medallion Architecture (Raw, Bronze, Silver, Gold) using **Databricks Asset Bundles (DABs)** and **Delta Live Tables (DLT)**. It automates the deployment of infrastructure and ETL code for processing event data within an Azure Databricks environment.
 
