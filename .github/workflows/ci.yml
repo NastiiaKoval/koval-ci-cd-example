@@ -24,6 +24,6 @@ jobs:
       - name: Validate bundle (dev target)
         env:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_DEV }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks bundle validate --target dev
