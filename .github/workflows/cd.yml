@@ -1,0 +1,65 @@
+# .github/workflows/cd.yml
+# Runs on merge to main — deploys dev → prod
+
+name: CD — Deploy Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  # ── DEV ─────────────────────────────────────────
+  deploy-dev:
+    name: Deploy to DEV
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+      - name: Deploy to DEV
+        env:
+          DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+        run: |
+          databricks bundle deploy --target dev
+
+      - name: Run job on DEV
+        env:
+          DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+        run: |
+          databricks bundle run lab7_daily_job --target dev
+
+  # ── PROD ────────────────────────────────────────
+  deploy-prod:
+    name: Deploy to PROD
+    runs-on: ubuntu-latest
+    needs: deploy-dev          # runs only after dev succeeded
+    environment: production    # manual approval gate
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+      - name: Deploy to PROD
+        env:
+          DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_PROD }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
+        run: |
+          databricks bundle deploy --target prod
+
+      - name: Run job on PROD
+        env:
+          DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_PROD }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
+        run: |
+          databricks bundle run lab7_daily_job --target prod
