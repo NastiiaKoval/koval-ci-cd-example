@@ -1,17 +1,40 @@
 # lab7_bundle_ci/cd
 
-This project implements a complete Medallion Architecture (Raw, Bronze, Silver, Gold) using **Databricks Asset Bundles (DABs)** and **Delta Live Tables (DLT)**. It automates the deployment of infrastructure and ETL code for processing event data within an Azure Databricks environment.
+# lab7 — Medallion ETL Pipeline with CI/CD
+
+This project implements a **Medallion Architecture** (Raw → Bronze → Silver → Gold)
+using Databricks Asset Bundles (DAB), Delta Live Tables (DLT), and GitHub Actions CI/CD.
+It automates deployment of ETL code across DEV and PROD environments on Azure Databricks.
+
+---
 
 ## Project Structure
 
-* **`resources/`**: Infrastructure configuration files (YAML).
-    * `lab5_bundle_etl.pipeline.yml`: Defines the DLT pipeline settings (clusters, libraries, and target schemas).
-    * `lab5_job.job.yml`: Defines the Databricks Job that triggers the pipeline on a schedule.
-* **`src/`**: Python source code for data processing.
-    * `00_source_to_bronze.py`: Ingests raw JSON data from Azure Data Lake Storage using Auto Loader.
-    * `01_bronze_to_silver.py`: Handles data cleansing, validation via DLT Expectations, and deduplication.
-    * `02_silver_to_gold.py`: Performs data aggregation and business-level transformations.
-* **`databricks.yml`**: The main bundle configuration file defining environment variables (catalog, schema, paths) for `dev` and `prod` targets.
+├── .github/
+│   └── workflows/
+│       ├── ci.yml          # Validates bundle on every Pull Request to main
+│       └── cd.yml          # Deploys DEV → PROD on merge to main
+├── src/
+│   ├── 00_generate_data.py     # Generates synthetic JSON event files to ADLS
+│   ├── 01_source_to_bronze.py  # Auto Loader ingestion → raw + bronze DLT tables
+│   ├── 02_bronze_to_silver.py  # DLT Expectations, dedup, cleansing → silver
+│   └── 03_silver_to_gold.py    # Aggregations → gold (sessions, daily stats)
+├── databricks.yml              # Bundle config: variables, dev + prod targets
+├── pyproject.toml
+└── README.md
+
+---
+
+## CI/CD Pipeline
+
+Every code change goes through an automated pipeline before reaching production:
+feature/* branch
+↓  Pull Request
+CI: bundle validate --target dev     ← blocks merge if invalid
+↓  Merge to main
+CD: bundle deploy + run --target dev
+↓  on success
+CD: bundle deploy + run --target prod
 
 ---
 
@@ -37,22 +60,18 @@ databricks configure
 ### 3. Deployment
 Deploy a development copy of the project. This will prefix resources with `[dev <user_name>]` and point to your development schema:
 ```bash
-databricks bundle deploy
+databricks bundle deploy --target prod
 ```
 
 To run the pipeline after deployment:
 ```bash
-databricks bundle run lab5_bundle_etl
+databricks bundle run lab7_daily_job --target prod
 ```
 
 ---
 
 ## Configuration and Parameters
 
-To avoid hardcoding sensitive information or environment-specific paths, this project utilizes bundle variables defined in `databricks.yml`. Key parameters include:
-
-* **Catalog**: `dbr_dev`
-* **Target Schema**: `koval_bronze`
-* **Source Path**: `abfss://kovalcontainer@sadlsdev.dfs.core.windows.net/raw/incremental/`
-
-These values are injected into the Spark configuration of the pipeline and accessed within Python scripts via `spark.conf.get()`.
+Key parameters defined in `databricks.yml` and injected via `spark.conf.get()`
+**Secret scopes**: Must exist in each workspace independently before first deploy.
+  PROD requires `kvbddev-scope/storagekey` configured in the PROD workspace.
