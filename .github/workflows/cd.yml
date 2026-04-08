@@ -25,14 +25,14 @@ jobs:
       - name: Deploy to DEV
         env:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_DEV }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks bundle deploy --target dev
 
       - name: Run job on DEV
         env:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_DEV }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks bundle run lab7_daily_job --target dev
 
