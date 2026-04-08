@@ -23,6 +23,9 @@ variables:
   raw_input_path:
     description: "Path to raw incremental files"
     default: "abfss://kovalcontainer@sadlsdev.dfs.core.windows.net/raw/incremental/"
+  warehouse_id:
+    description: "Databricks SQL Warehouse ID"
+    default: "a1f04664c7fcffa4"  
 
 targets:
 # _________________DEV____________________
@@ -93,6 +96,11 @@ targets:
               pipeline_task:
                 pipeline_id: ${resources.pipelines.lab7_etl_pipeline.id}
 
+      dashboards:
+        sessions_dashboard:
+          display_name: "[DEV] Lab7 - Medallion Sessions Dashboard"
+          warehouse_id: ${var.warehouse_id}
+          file_path: dashboard/sessions_dashboard.lvdash.json  
 
 
 # _________________PROD____________________
@@ -161,6 +169,12 @@ targets:
                 - task_key: generate_data
               pipeline_task:
                 pipeline_id: ${resources.pipelines.lab7_etl_pipeline.id}
+
+      dashboards:
+        sessions_dashboard:
+          display_name: "[PROD] Lab7 - Medallion Sessions Dashboard"
+          warehouse_id: ${var.warehouse_id}
+          file_path: dashboard/sessions_dashboard.lvdash.json  
 
     permissions:
       - user_name: kovalnasta919@softserve.academy

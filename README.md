@@ -11,16 +11,27 @@ It automates deployment of ETL code across DEV and PROD environments on Azure Da
 ## Project Structure
 
 ├── .github/
+
 │   └── workflows/
+
 │       ├── ci.yml          # Validates bundle on every Pull Request to main
+
 │       └── cd.yml          # Deploys DEV → PROD on merge to main
+
 ├── src/
+
 │   ├── 00_generate_data.py     # Generates synthetic JSON event files to ADLS
+
 │   ├── 01_source_to_bronze.py  # Auto Loader ingestion → raw + bronze DLT tables
+
 │   ├── 02_bronze_to_silver.py  # DLT Expectations, dedup, cleansing → silver
+
 │   └── 03_silver_to_gold.py    # Aggregations → gold (sessions, daily stats)
+
 ├── databricks.yml              # Bundle config: variables, dev + prod targets
+
 ├── pyproject.toml
+
 └── README.md
 
 ---
@@ -30,10 +41,15 @@ It automates deployment of ETL code across DEV and PROD environments on Azure Da
 Every code change goes through an automated pipeline before reaching production:
 feature/* branch
 ↓  Pull Request
+
 CI: bundle validate --target dev     ← blocks merge if invalid
+
 ↓  Merge to main
+
 CD: bundle deploy + run --target dev
+
 ↓  on success
+
 CD: bundle deploy + run --target prod
 
 ---
@@ -72,6 +88,8 @@ databricks bundle run lab7_daily_job --target prod
 
 ## Configuration and Parameters
 
-Key parameters defined in `databricks.yml` and injected via `spark.conf.get()`
-**Secret scopes**: Must exist in each workspace independently before first deploy.
-  PROD requires `kvbddev-scope/storagekey` configured in the PROD workspace.
+Key parameters defined in `databricks.yml` and injected via `spark.conf.get()`.
+
+Secret scope: Must exist in each workspace independently before first deploy.
+
+PROD requires `kvbddev-scope/storagekey` configured in the PROD workspace.
