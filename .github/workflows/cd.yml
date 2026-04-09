@@ -67,7 +67,7 @@ jobs:
           WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
           WAREHOUSE_ID_PROD: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
-          databricks bundle deploy --target prod \
+          databricks bundle deploy --target prod --force \
           --var "raw_input_path=${RAW_INPUT_PATH}" \
           --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" \
           --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}" 
