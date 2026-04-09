@@ -4,14 +4,14 @@
       "name": "fa7e1ee7",
       "displayName": "gold_daily_actions",
       "queryLines": [
-        "SELECT * FROM dbr_prod.koval_bronze_prod.gold_daily_actions"
+        "SELECT * FROM dbr_prod.koval_bronze.gold_daily_actions"
       ]
     },
     {
       "name": "ad1b78be",
       "displayName": "gold_user_sessions",
       "queryLines": [
-        "SELECT * FROM dbr_prod.koval_bronze_prod.gold_user_sessions"
+        "SELECT * FROM dbr_prod.koval_bronze.gold_user_sessions"
       ],
       "columns": [
         {

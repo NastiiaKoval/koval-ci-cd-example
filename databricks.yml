@@ -9,17 +9,17 @@ sync:
 # Глобальні змінні
 variables:
   catalog_dev:
-    description: "Catalog name"
+    description: "Catalog name DEV"
     default: "dbr_dev"
-  schema_dev:
-    description: "Schema for DEV"
-    default: "koval_bronze"
   catalog_prod:
-    description: "Catalog name"
-    default: "dbr_prod"
-  schema_prod:
-    description: "Schema for PROD"
-    default: "koval_bronze_prod"
+    description: "Catalog name PROD"
+    default: "dbr_prod"   
+  schema_bronze:
+    default: "koval_bronze"
+  schema_silver:
+    default: "koval_silver"  
+  schema_gold:
+    default: "koval_gold"
   raw_input_path:
     description: "Path to raw incremental files"
   warehouse_id_dev:
@@ -41,7 +41,7 @@ targets:
         lab7_etl_pipeline:
           name: "[DEV] Lab7 - Medallion ETL Pipeline"
           catalog: ${var.catalog_dev}
-          schema: ${var.schema_dev}
+          schema: ${var.schema_bronze}
           development: true
 
           clusters:
@@ -76,7 +76,11 @@ targets:
               spark_conf:
                 spark.databricks.cluster.profile: singleNode
                 spark.master: local[*]
-                my.raw_path: ${var.raw_input_path} 
+                my.raw_path:       ${var.raw_input_path}
+                my.catalog:        ${var.catalog_dev}
+                my.schema_bronze:  ${var.schema_bronze}
+                my.schema_silver:  ${var.schema_silver}
+                my.schema_gold:    ${var.schema_gold}
                 spark.databricks.delta.schema.autoMerge.enabled: "true"
                 fs.azure.account.key.sadlsdev.dfs.core.windows.net: "{{secrets/kvbddev-scope/storagekey}}"
 
@@ -114,7 +118,7 @@ targets:
         lab7_etl_pipeline:
           name: "[PROD] Lab7 - Medallion ETL Pipeline"
           catalog: ${var.catalog_prod}
-          schema: ${var.schema_prod}
+          schema: ${var.schema_bronze}
           development: false
 
           clusters:
@@ -149,7 +153,11 @@ targets:
               spark_conf:
                 spark.databricks.cluster.profile: singleNode
                 spark.master: local[*]
-                my.raw_path: ${var.raw_input_path} 
+                my.raw_path:       ${var.raw_input_path}
+                my.catalog:        ${var.catalog_prod}
+                my.schema_bronze:  ${var.schema_bronze}
+                my.schema_silver:  ${var.schema_silver}
+                my.gold_schema:    ${var.schema_gold} 
                 spark.databricks.delta.schema.autoMerge.enabled: "true"
                 fs.azure.account.key.sadlsdev.dfs.core.windows.net: "{{secrets/kvbddev-scope/storagekey}}"
 
