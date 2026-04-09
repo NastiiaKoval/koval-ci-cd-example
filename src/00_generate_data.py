@@ -51,6 +51,8 @@ def generate_json_files(
     # print(f"Generation completed: {start_idx} → {end_idx-1}")
 
 # Automatic determination of the next index
+target_dir = spark.conf.get("my.raw_path")
+
 files = dbutils.fs.ls(target_dir)
 indices = []
 for f in files:
@@ -73,8 +75,6 @@ end_idx = start_idx + num_new_files
 
 print(f"Detected max file_index in bronze: {max_file_index}")
 print(f"Generating next {num_new_files} files: {start_idx} → {end_idx-1}")
-
-target_dir = spark.conf.get("my.raw_path")
 
 # Run
 generate_json_files(start_idx, end_idx, target_dir)
