@@ -31,5 +31,5 @@ jobs:
         run: |
           databricks bundle validate --target dev \
           --var "raw_input_path=${RAW_INPUT_PATH}" \
-          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" 
+          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" \
           --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}" 
