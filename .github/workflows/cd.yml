@@ -28,11 +28,12 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           RAW_INPUT_PATH: ${{ secrets.RAW_INPUT_PATH }}
           WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
+          WAREHOUSE_ID_PROD: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle deploy --target dev \
-          --var "workspace_host_dev=${DATABRICKS_HOST}" \
           --var "raw_input_path=${RAW_INPUT_PATH}" \
           --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" 
+          --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}" 
 
       - name: Run job on DEV
         env:
@@ -60,12 +61,13 @@ jobs:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_PROD }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
           RAW_INPUT_PATH: ${{ secrets.RAW_INPUT_PATH }}
+          WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
           WAREHOUSE_ID_PROD: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle deploy --target prod \
-          --var "workspace_host_prod=${DATABRICKS_HOST_PROD}" \
           --var "raw_input_path=${RAW_INPUT_PATH}" \
-          --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}"
+          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" 
+          --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}" 
 
       - name: Run job on PROD
         env:
