@@ -99,9 +99,9 @@ targets:
         sessions_dashboard:
           display_name: "[DEV] Lab7 - Medallion Sessions Dashboard"
           warehouse_id: ${var.warehouse_id_dev}
-          file_path: dashboard/sessions_dashboard.lvdash.json   
+          file_path: dashboard/sessions_dashboard_dev.lvdash.json   
 
-# _________________PROD____________________
+# _____________________PROD_______________________
   prod:
     mode: production
     workspace:
@@ -172,7 +172,7 @@ targets:
         sessions_dashboard:
           display_name: "[PROD] Lab7 - Medallion Sessions Dashboard"
           warehouse_id: ${var.warehouse_id_prod}
-          file_path: dashboard/sessions_dashboard.lvdash.json  
+          file_path: dashboard/sessions_dashboard_prod.lvdash.json 
 
     permissions:
       - group_name: senior_analysts
