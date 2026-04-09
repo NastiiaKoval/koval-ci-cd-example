@@ -1,0 +1,547 @@
+{
+  "datasets": [
+    {
+      "name": "fa7e1ee7",
+      "displayName": "gold_daily_actions",
+      "queryLines": [
+        "SELECT * FROM dbr_prod.koval_bronze_prod.gold_daily_actions"
+      ]
+    },
+    {
+      "name": "ad1b78be",
+      "displayName": "gold_user_sessions",
+      "queryLines": [
+        "SELECT * FROM dbr_prod.koval_bronze_prod.gold_user_sessions"
+      ],
+      "columns": [
+        {
+          "displayName": "Has Purchase",
+          "description": "Flag: 1 if session has at least one purchase, 0 otherwise",
+          "expression": "CASE WHEN `purchase_count` >= 1 THEN 1 ELSE 0 END"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "af690f18",
+      "displayName": "Daily Actions",
+      "layout": [
+        {
+          "widget": {
+            "name": "60e2dedd",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fa7e1ee7",
+                  "fields": [
+                    {
+                      "name": "sum(action_share_pct)",
+                      "expression": "SUM(`action_share_pct`)"
+                    },
+                    {
+                      "name": "event_type",
+                      "expression": "`event_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Action Share % Breakdown by Event Type",
+                "showTitle": true
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(action_share_pct)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Action Share %"
+                },
+                "color": {
+                  "fieldName": "event_type",
+                  "legend": {
+                    "position": "right"
+                  },
+                  "displayName": "Event Type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "d0ac0819",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fa7e1ee7",
+                  "fields": [
+                    {
+                      "name": "event_type",
+                      "expression": "`event_type`"
+                    },
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "sum(event_count)",
+                      "expression": "SUM(`event_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Daily Trend of Event Count by Event Type",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "event_date",
+                  "displayName": "Event Date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(event_count)",
+                  "displayName": "Event Count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "event_type",
+                  "legend": {
+                    "position": "right"
+                  },
+                  "displayName": "Event Type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "3f671dc1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fa7e1ee7",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "sum(total_daily_events)",
+                      "expression": "SUM(`total_daily_events`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Total Daily Events by Event Date",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "event_date",
+                  "displayName": "Event Date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_daily_events)",
+                  "displayName": "Total Daily Events",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "4c7788be",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fa7e1ee7",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "sum(unique_users)",
+                      "expression": "SUM(`unique_users`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Unique Users Over Time",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "event_date",
+                  "displayName": "Event Date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(unique_users)",
+                  "displayName": "Unique Users",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "589c0a64",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "300af55a",
+            "queries": [
+              {
+                "name": "dashboards/01f132719c2e12a2b74e0655a4a4121f/datasets/01f13271c54610408fb89bfdd7474168_event_date",
+                "query": {
+                  "datasetName": "fa7e1ee7",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "event_date_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "event_date",
+                    "queryName": "dashboards/01f132719c2e12a2b74e0655a4a4121f/datasets/01f13271c54610408fb89bfdd7474168_event_date"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "c579f2e5",
+            "queries": [
+              {
+                "name": "dashboards/01f132719c2e12a2b74e0655a4a4121f/datasets/01f13273df3016f6a4962ee1419d5c58_platform",
+                "query": {
+                  "datasetName": "ad1b78be",
+                  "fields": [
+                    {
+                      "name": "platform",
+                      "expression": "`platform`"
+                    },
+                    {
+                      "name": "platform_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "platform",
+                    "queryName": "dashboards/01f132719c2e12a2b74e0655a4a4121f/datasets/01f13273df3016f6a4962ee1419d5c58_platform"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "81074278",
+      "displayName": "User Sessions",
+      "layout": [
+        {
+          "widget": {
+            "name": "955148ba",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ad1b78be",
+                  "fields": [
+                    {
+                      "name": "avg(Has Purchase)",
+                      "expression": "AVG(`Has Purchase`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "% Sessions with Purchase",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Has Purchase)",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  },
+                  "displayName": "Purchase Rate"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "05d6b22a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ad1b78be",
+                  "fields": [
+                    {
+                      "name": "avg(purchase_count)",
+                      "expression": "AVG(`purchase_count`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`Has Purchase` IN (1)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Purchases per Purchasing Session",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(purchase_count)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Avg Purchases"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "3ad51fec",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ad1b78be",
+                  "fields": [
+                    {
+                      "name": "platform",
+                      "expression": "`platform`"
+                    },
+                    {
+                      "name": "avg(Has Purchase)",
+                      "expression": "AVG(`Has Purchase`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Purchase Rate by Platform",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "platform",
+                  "displayName": "Platform",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(Has Purchase)",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  },
+                  "displayName": "Purchase Rate",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

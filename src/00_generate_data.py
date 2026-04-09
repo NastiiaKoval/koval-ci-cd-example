@@ -51,18 +51,21 @@ def generate_json_files(
     # print(f"Generation completed: {start_idx} → {end_idx-1}")
 
 # Automatic determination of the next index
-bronze_table = "dbr_dev.koval_bronze.bronze_events"
+files = dbutils.fs.ls(target_dir)
+indices = []
+for f in files:
+    if "events_batch_" in f.name:
+        name = f.name
+        # Remove trailing slash if present
+        if name.endswith('/'):
+            name = name[:-1]
+        try:
+            idx = int(name.split("_")[-1].replace(".json", ""))
+            indices.append(idx)
+        except ValueError:
+            continue
 
-try:
-    # if table exist 
-    max_idx_df = spark.sql(f"""
-        SELECT COALESCE(MAX(file_index), -1) AS max_file_index 
-        FROM {bronze_table}
-    """)
-    max_file_index = max_idx_df.collect()[0]["max_file_index"]
-except Exception:
-    # if the table dosn't exist or is empty
-    max_file_index = -1
+max_file_index = max(indices) if indices else -1
 
 start_idx = max_file_index + 1
 num_new_files = 100
