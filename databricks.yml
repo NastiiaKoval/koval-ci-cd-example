@@ -22,10 +22,10 @@ variables:
     default: "koval_bronze_prod"
   raw_input_path:
     description: "Path to raw incremental files"
-    default: "abfss://kovalcontainer@sadlsdev.dfs.core.windows.net/raw/incremental/"
-  warehouse_id:
-    description: "Databricks SQL Warehouse ID"
-    default: "a1f04664c7fcffa4"  
+  warehouse_id_dev:
+    description: "Databricks SQL Warehouse ID DEV"
+  warehouse_id_prod:
+    description: "Databricks SQL Warehouse ID PROD"  
 
 targets:
 # _________________DEV____________________
@@ -34,8 +34,7 @@ targets:
     mode: development
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
-      root_path: /Workspace/Users/kovalnasta919@softserve.academy/${bundle.name}/${bundle.target}
-
+      root_path: /Workspace/Users/${workspace.current_user.userName}/${bundle.name}/${bundle.target}
 
     resources:
       pipelines:
@@ -99,16 +98,15 @@ targets:
       dashboards:
         sessions_dashboard:
           display_name: "[DEV] Lab7 - Medallion Sessions Dashboard"
-          warehouse_id: ${var.warehouse_id}
-          file_path: dashboard/sessions_dashboard.lvdash.json  
-
+          warehouse_id: ${var.warehouse_id_dev}
+          file_path: dashboard/sessions_dashboard.lvdash.json   
 
 # _________________PROD____________________
   prod:
     mode: production
     workspace:
-      host: https://adb-7405608700467273.13.azuredatabricks.net
-      root_path: /Workspace/Users/kovalnasta919@softserve.academy/${bundle.name}/${bundle.target}
+      host: https://adb-7405608700467273.13.azuredatabricks.net 
+      root_path: /Workspace/Users/${workspace.current_user.userName}/${bundle.name}/${bundle.target}
 
 
     resources:
@@ -173,9 +171,11 @@ targets:
       dashboards:
         sessions_dashboard:
           display_name: "[PROD] Lab7 - Medallion Sessions Dashboard"
-          warehouse_id: ${var.warehouse_id}
+          warehouse_id: ${var.warehouse_id_prod}
           file_path: dashboard/sessions_dashboard.lvdash.json  
 
     permissions:
-      - user_name: kovalnasta919@softserve.academy
-        level: CAN_MANAGE
+      - group_name: senior_analysts
+        level: CAN_MANAGE  
+      - group_name: users
+        level: CAN_VIEW
