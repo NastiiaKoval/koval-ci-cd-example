@@ -157,7 +157,7 @@ targets:
                 my.catalog:        ${var.catalog_prod}
                 my.schema_bronze:  ${var.schema_bronze}
                 my.schema_silver:  ${var.schema_silver}
-                my.gold_schema:    ${var.schema_gold} 
+                my.schema_gold:    ${var.schema_gold} 
                 spark.databricks.delta.schema.autoMerge.enabled: "true"
                 fs.azure.account.key.sadlsdev.dfs.core.windows.net: "{{secrets/kvbddev-scope/storagekey}}"
 
