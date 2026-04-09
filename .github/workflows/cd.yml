@@ -28,10 +28,12 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           RAW_INPUT_PATH: ${{ secrets.RAW_INPUT_PATH }}
           WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
+          WAREHOUSE_ID_PROD: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle deploy --target dev \
           --var "raw_input_path=${RAW_INPUT_PATH}" \
-          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" 
+          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" \
+          --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}" 
 
       - name: Run job on DEV
         env:
@@ -39,6 +41,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           BUNDLE_VAR_raw_input_path: ${{ secrets.RAW_INPUT_PATH }}
           BUNDLE_VAR_warehouse_id_dev: ${{ secrets.WAREHOUSE_ID_DEV }}
+          BUNDLE_VAR_warehouse_id_prod: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle run lab7_daily_job --target dev 
 
@@ -61,10 +64,12 @@ jobs:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_PROD }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
           RAW_INPUT_PATH: ${{ secrets.RAW_INPUT_PATH }}
+          WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
           WAREHOUSE_ID_PROD: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle deploy --target prod \
           --var "raw_input_path=${RAW_INPUT_PATH}" \
+          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" \
           --var "warehouse_id_prod=${WAREHOUSE_ID_PROD}" 
 
       - name: Run job on PROD
@@ -72,6 +77,7 @@ jobs:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_PROD }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
           BUNDLE_VAR_raw_input_path: ${{ secrets.RAW_INPUT_PATH }}
+          BUNDLE_VAR_warehouse_id_dev: ${{ secrets.WAREHOUSE_ID_DEV }}
           BUNDLE_VAR_warehouse_id_prod: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle run lab7_daily_job --target prod
