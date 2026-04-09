@@ -25,5 +25,10 @@ jobs:
         env:
           DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_DEV }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          RAW_INPUT_PATH: ${{ secrets.RAW_INPUT_PATH }}
+          WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
         run: |
-          databricks bundle validate --target dev
+          databricks bundle validate --target dev \
+          --var "workspace_host_dev=${DATABRICKS_HOST}" \
+          --var "raw_input_path=${RAW_INPUT_PATH}" \
+          --var "warehouse_id_dev=${WAREHOUSE_ID_DEV}" 

@@ -51,7 +51,7 @@ def generate_json_files(
     # print(f"Generation completed: {start_idx} → {end_idx-1}")
 
 # Automatic determination of the next index
-bronze_table = "koval_bronze.bronze_events_stream"
+bronze_table = "dbr_dev.koval_bronze.bronze_events"
 
 try:
     # if table exist 
