@@ -24,7 +24,7 @@ jobs:
       - name: Validate bundle (dev target)
         env:
           DATABRICKS_HOST_DEV:  ${{ secrets.DATABRICKS_HOST_DEV }}
-          DATABRICKS_TOKEN_DEV: ${{ secrets.DATABRICKS_TOKEN_DEV }}
+          DATABRICKS_TOKEN_DEV: ${{ secrets.DATABRICKS_TOKEN }}
           RAW_INPUT_PATH: ${{ secrets.RAW_INPUT_PATH }}
           WAREHOUSE_ID_PROD: ${{ secrets.WAREHOUSE_ID_PROD }}
           WAREHOUSE_ID_DEV: ${{ secrets.WAREHOUSE_ID_DEV }}
