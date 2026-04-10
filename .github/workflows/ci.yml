@@ -30,3 +30,17 @@ jobs:
           BUNDLE_VAR_warehouse_id_prod: ${{ secrets.WAREHOUSE_ID_PROD }}
         run: |
           databricks bundle validate --target dev
+
+      - name: Validate bundle (prod target)
+        env:
+          DATABRICKS_HOST:  ${{ secrets.DATABRICKS_HOST_PROD }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_PROD }}
+          BUNDLE_VAR_raw_input_path: ${{ secrets.RAW_INPUT_PATH }}
+          BUNDLE_VAR_warehouse_id_dev: ${{ secrets.WAREHOUSE_ID_DEV }}
+          BUNDLE_VAR_warehouse_id_prod: ${{ secrets.WAREHOUSE_ID_PROD }}
+        run: |
+          databricks bundle validate --target prod
+          
+          
+
+          
