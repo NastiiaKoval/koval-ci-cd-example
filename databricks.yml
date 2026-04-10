@@ -98,6 +98,13 @@ targets:
                 - task_key: generate_data
               pipeline_task:
                 pipeline_id: ${resources.pipelines.lab7_etl_pipeline.id}
+            
+            - task_key: apply_security
+              depends_on:
+                - task_key: run_pipeline
+              job_cluster_key: lab7_koval_cluster
+              spark_python_task:
+                python_file: src/04_security.py    
 
       dashboards:
         sessions_dashboard:
@@ -175,6 +182,13 @@ targets:
                 - task_key: generate_data
               pipeline_task:
                 pipeline_id: ${resources.pipelines.lab7_etl_pipeline.id}
+
+            - task_key: apply_security
+              depends_on:
+                - task_key: run_pipeline
+              job_cluster_key: lab7_koval_cluster
+              spark_python_task:
+                python_file: src/04_security.py   
 
       dashboards:
         sessions_dashboard:
