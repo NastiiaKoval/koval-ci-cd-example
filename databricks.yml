@@ -70,7 +70,7 @@ targets:
           job_clusters:
           - job_cluster_key: lab7_koval_cluster
             new_cluster:
-              spark_version: "13.3.x-scala2.12"
+              spark_version: "17.3.x-scala2.13"
               node_type_id: "Standard_F4"
               num_workers: 0
               data_security_mode: SINGLE_USER
@@ -155,7 +155,7 @@ targets:
           job_clusters:
           - job_cluster_key: lab7_koval_cluster
             new_cluster:
-              spark_version: "13.3.x-scala2.12"
+              spark_version: "17.3.x-scala2.13"
               node_type_id: "Standard_F4"
               num_workers: 0
               data_security_mode: SINGLE_USER
