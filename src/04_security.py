@@ -28,7 +28,7 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_table('gold_daily_actions')}
+ALTER MATERIALIZED VIEW {fqn_table('gold_daily_actions')}
 SET ROW FILTER {fqn('rls_recent_date_filter')} ON (event_date)
 """)
 
@@ -48,12 +48,12 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_table('dlt_silver_events')}
+ALTER MATERIALIZED VIEW {fqn_table('dlt_silver_events')}
 ALTER COLUMN user_id SET MASK {fqn('cls_mask_user_id')}
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_table('gold_user_sessions')}
+ALTER MATERIALIZED VIEW {fqn_table('gold_user_sessions')}
 ALTER COLUMN user_id SET MASK {fqn('cls_mask_user_id')}
 """)
 
@@ -74,7 +74,7 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_table('dlt_silver_events')}
+ALTER MATERIALIZED VIEW {fqn_table('dlt_silver_events')}
 ALTER COLUMN event_id SET MASK {fqn('cls_mask_event_id')}
 """)
 
@@ -93,7 +93,7 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_table('dlt_silver_events')}
+ALTER MATERIALIZED VIEW {fqn_table('dlt_silver_events')}
 ALTER COLUMN uri SET MASK {fqn('cls_mask_uri')}
 """)
 
