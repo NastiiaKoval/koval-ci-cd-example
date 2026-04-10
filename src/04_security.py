@@ -1,17 +1,13 @@
 # 04_apply_security.py
 
 # ── Configuration ─────────────────────────────────────
-CATALOG      = spark.conf.get("my.catalog")          # dbr_dev / dbr_prod
-SCHEMA_SILVER = spark.conf.get("my.schema_silver")
+CATALOG       = spark.conf.get("my.catalog")  # dbr_dev / dbr_prod
+SCHEMA_BRONZE = spark.conf.get("my.schema_bronze")        
 SCHEMA_GOLD   = spark.conf.get("my.schema_gold")
 
-def fqn_silver(table):
-    """Fully qualified silver table name."""
-    return f"{CATALOG}.{SCHEMA_SILVER}.{table}"
-
-def fqn_gold(table):
-    """Fully qualified gold table name."""
-    return f"{CATALOG}.{SCHEMA_GOLD}.{table}"
+def fqn_table(table):
+    """Fully qualified for all table name."""
+    return f"{CATALOG}.{SCHEMA_BRONZE}.{table}"
 
 def fqn(func):
     """Fully qualified function name."""
@@ -32,7 +28,7 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_gold('gold_daily_actions')}
+ALTER TABLE {fqn_table('gold_daily_actions')}
 SET ROW FILTER {fqn('rls_recent_date_filter')} ON (event_date)
 """)
 
@@ -52,12 +48,12 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_silver('dlt_silver_events')}
+ALTER TABLE {fqn_table('dlt_silver_events')}
 ALTER COLUMN user_id SET MASK {fqn('cls_mask_user_id')}
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_gold('gold_user_sessions')}
+ALTER TABLE {fqn_table('gold_user_sessions')}
 ALTER COLUMN user_id SET MASK {fqn('cls_mask_user_id')}
 """)
 
@@ -78,7 +74,7 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_silver('dlt_silver_events')}
+ALTER TABLE {fqn_table('dlt_silver_events')}
 ALTER COLUMN event_id SET MASK {fqn('cls_mask_event_id')}
 """)
 
@@ -97,7 +93,7 @@ RETURN
 """)
 
 spark.sql(f"""
-ALTER TABLE {fqn_silver('dlt_silver_events')}
+ALTER TABLE {fqn_table('dlt_silver_events')}
 ALTER COLUMN uri SET MASK {fqn('cls_mask_uri')}
 """)
 
